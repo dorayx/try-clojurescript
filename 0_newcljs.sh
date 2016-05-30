@@ -7,9 +7,7 @@ fi
 
 DEFAULT_PROJECT_NAME='sample_project'
 DEFAULT_NAMESPACE='sample-project'
-
-PROJECT_NAME=${1:-'unknown_project'}
-PROJECT_NAME=${PROJECT_NAME//-/_}
+PROJECT_NAME=${1//-/_}
 NAMESPACE=${PROJECT_NAME//_/-}
 
 cp -r $DEFAULT_PROJECT_NAME $PROJECT_NAME && cd $PROJECT_NAME
