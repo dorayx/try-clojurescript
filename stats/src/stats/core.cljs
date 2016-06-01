@@ -1,5 +1,6 @@
 (ns stats.core
-  (:require ))
+  (:require [dommy.core :as dommy :refer-macros [sel1]]
+            [clojure.string :as str]))
 
 (enable-console-print!)
 
@@ -47,3 +48,26 @@
         numerator (- sum-x2 (/ (* sum-x sum-x) n))
         denominator (- n 1)]
     (.sqrt js/Math (/ numerator denominator))))
+
+(defn read-numbers
+  "Read input numbers."
+  [el-input]
+  (let [str-numbers (str/split (dommy/value el-input) #"[\s,]+")]
+    (map (fn [x] (js/parseFloat x)) str-numbers)))
+
+(defn calculate
+  "Calculate the mean, median and stdev."
+  [evt]
+  (let [numbers (read-numbers (.-target evt))
+        el-mean (sel1 "#mean")
+        el-median (sel1 "#median")
+        el-stdev (sel1 "#stdev")
+        val-mean (mean numbers)
+        val-median (median numbers)
+        val-stdev (stdev numbers)]
+    (dommy/set-text! el-mean val-mean)
+    (dommy/set-text! el-median val-median)
+    (dommy/set-text! el-stdev val-stdev)))
+
+(let [el-input (sel1 "#numbers")]
+  (dommy/listen! el-input :change calculate))
